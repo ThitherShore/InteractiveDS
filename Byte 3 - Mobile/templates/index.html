@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+    <title>Index</title>
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Custom styles for this project -->
+    <link href="css/explore.css" rel="stylesheet">
+  </head>
+  
+  <body role="document">
+    
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container" >
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="about">About This Data Set</a></li>
+	    <li><a href="quality">Data Quality</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    
+    <div class="container theme-showcase" role="main">
+      
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+	<h1>Interactive Data Science Project Exploratory Analysis Byte Example</h1>
+        <p>This is the Exploratory Analysis Byte of the Interactive Data Science class.</p>
+      </div>
+      
+      <div class="page-header">
+	
+      </div> <!-- /page-header -->
+    </div> <!-- /container -->
+
+<svg></svg>
+
+<!-- STYLES FOR D3 -->
+<style>
+/* Styles for date/time chart */
+path { 
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+div.tooltip {	
+    position: absolute;			
+    text-align: center;			
+    width: 60px;					
+    height: 28px;					
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: lightsteelblue;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}
+/* End styles for date/time chart */
+
+/* Styles for bar chart */
+.bar {
+  fill: steelblue;
+}
+.bar:hover {
+  fill: brown;
+}
+/* End styles for bar chart*/
+</style>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script> 
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+    $( document ).ready(function() {
+	
+		/* Start date/time hover graph code
+		*/
+		
+		// Set the dimensions of the canvas / graph
+		var margin = {top: 30, right: 20, bottom: 30, left: 50},
+		    width = 600 - margin.left - margin.right,
+		    height = 270 - margin.top - margin.bottom;
+		
+		// Parse the date / time
+		var parseDate = d3.timeParse("%d-%b-%y");
+		var formatTime = d3.timeFormat("%e %B");
+		
+		// Set the x and y ranges
+		var x = d3.scaleTime().range([0, width]);
+		var y = d3.scaleLinear().range([height, 0]);
+		
+		// Define the axes
+		var xAxis = d3.axisBottom(x).ticks(5);
+		
+		var yAxis = d3.axisLeft(y).ticks(5);
+		
+		// Define the line we're going to draw via our data points
+		var valueline = d3.line()
+		    .x(function(d) { return x(d.date); })
+		    .y(function(d) { return y(d.close); });
+		
+		// Define the div for the tooltip
+		var div = d3.select("body").append("div")	
+		    .attr("class", "tooltip")				
+		    .style("opacity", 0);
+		
+		// Adds the svg canvas
+		var svg = d3.select("body")
+		    .append("svg")
+		        .attr("width", width + margin.left + margin.right)
+		        .attr("height", height + margin.top + margin.bottom)
+		    .append("g")
+		        .attr("transform", 
+		              "translate(" + margin.left + "," + margin.top + ")");
+		
+		// Get the data
+		d3.csv("css/walk.csv", function(error, data) {
+		    data.forEach(function(d) {
+		        d.date = parseDate(d.date);
+		        d.close = +d.close;
+				console.log('d.date: ' + d.date + ', d.close: ' + d.close);
+		    });
+		
+		    // Scale the range of the data
+		    x.domain(d3.extent(data, function(d) { return d.date; }));
+		    y.domain([0, d3.max(data, function(d) { return d.close; })]);
+		
+		    // Add the valueline path.
+		    svg.append("path")
+		        .attr("class", "line")
+		        .attr("d", valueline(data));
+		
+		    // Add the scatterplot
+		    svg.selectAll("dot")	
+		        .data(data)			
+		    .enter().append("circle")								
+		        .attr("r", 5)		
+		        .attr("cx", function(d) { return x(d.date); })		 
+		        .attr("cy", function(d) { return y(d.close); })		
+		        .on("mouseover", function(d) {		
+		            div.transition()		
+		                .duration(200)		
+		                .style("opacity", .9);		
+		            div	.html(formatTime(d.date) + "<br/>"  + d.close)	
+		                .style("left", (d3.event.pageX) + "px")		
+		                .style("top", (d3.event.pageY - 28) + "px");	
+		            })					
+		        .on("mouseout", function(d) {		
+		            div.transition()		
+		                .duration(500)		
+		                .style("opacity", 0);	
+		        });
+		
+		    // Add the X Axis
+		    svg.append("g")
+		        .attr("class", "x axis")
+		        .attr("transform", "translate(0," + height + ")")
+		        .call(xAxis);
+		
+		    // Add the Y Axis
+		    svg.append("g")
+		        .attr("class", "y axis")
+		        .call(yAxis);
+		});
+		//End date/time hover graph
+		
+
+	
+	/*  Code for the bar chart, remove the surrounding comment markers to display.
+		When doing so, be sure to delete this text and comment out the above chart
+		
+		
+		var bar_svg = d3.select("svg").attr("width", 1200).attr("height", 1200),
+		    margin = {top: 20, right: 20, bottom: 30, left: 40},
+		    width = +bar_svg.attr("width") - margin.left - margin.right,
+		    height = +bar_svg.attr("height") - margin.top - margin.bottom;
+	
+		var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+		    y = d3.scaleLinear().rangeRound([height, 0]);
+		
+		var g = bar_svg.append("g")
+		    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		
+		d3.csv("css/sports.csv", function(d) {//d3.tsv("data.tsv", function(d) {
+		  //d.Year = +d.Year;
+		  d.Year = parseInt(d["Average attendance"].replace(',',''));
+		  return d;
+		}, function(error, data) {
+		  if (error) throw error;
+		
+		  x.domain(data.map(function(d) { return d.Tournament; }));
+		  y.domain([0, d3.max(data, function(d) { return d.Year; })]);
+		
+		  //Defines the X axis
+		  g.append("g")
+		      .attr("class", "axis axis--x")
+		      .attr("transform", "translate(0," + height + ")")
+		      .call(d3.axisBottom(x));
+		
+		  //Defines the Y axis
+		  g.append("g")
+		      .attr("class", "axis axis--y")
+		      .call(d3.axisLeft(y).ticks(10, "s"))
+		    .append("text")
+		      .attr("transform", "rotate(-90)")
+		      .attr("y", 6)
+		      .attr("dy", "0.71em")
+		      .attr("text-anchor", "end")
+		      .text("Year");
+		
+		  g.selectAll(".bar")
+		    .data(data)
+		    .enter().append("rect")
+		      .attr("class", "bar")
+		      .attr("x", function(d) { return x(d.Tournament); })
+		      .attr("y", function(d) { return y(d.Year); })
+		      .attr("width", x.bandwidth())
+		      .attr("height", function(d) { return height - y(d.Year); });
+		}); */ 
+		//End bar chart code
+		
+	}); //End document ready			   
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+    <title>Quality of This Data</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/theme.css" rel="stylesheet">
+  </head>
+
+  <body role="document">
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="about">About This Data Set</a></li>
+	    <li  class="active"><a href="quality">Data Quality</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container theme-showcase" role="main">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+	<h1>Quality: About This Data Set</h1>
+        <p>Write a brief summary about the quality of the data set here</a></p>
+      </div>
+
+    
+      <div class="page-header">
+	<h2>Is the data complete?</h2>
+	<p>If not, what is missing and what concerns does it raise?
+	What is your evidence for this?</p>
+	
+	<p><em><strong>Answer.</strong>&nbsp;</em>
+	The data is not complete. As is can be seen on the home page (and the table below), the market share of several brands during a couple of quarters is marked as a "-", which indicates&nbsp;a missing data.</p>
+	<p style="text-align: center;"><img src="http://thyrsi.com/t6/369/1536883556x-1404751351.png" alt="" width="900" height="350" /></p>
+	<p>It&nbsp;raises the&nbsp;concern that we might be missing some information about the market share. But luckily, in this specific case, we are actually not losing much information:</p>
+	<p>If you sum up with all other numerical values in each row, it will sum up to be 1. This indicates that those "missing" values are too small to be counted, and therefore I replaced these symbols "-" with 0's and obtained the following table.</p>
+	<p style="text-align: center;"><img src="http://thyrsi.com/t6/369/1536883579x-1404751351.png" alt="" width="900" height="350" /></p>
+      </div>
+      
+      <div class="page-header">
+	<h2>Is the data coherent?</h2>
+	<p>Does it make sense relative to itself? Does it match your
+	expectations? Are the distributions sensible? What is your
+	evidence for this?</p>
+	
+	<p><em><strong>Answer.</strong>&nbsp;</em>Yes. From the statistical perspective, the sum of each row is 100%, since the data is used to describe the market share held by worldwide smartphone vendors. There is no extreme value, or any value greater than 1 or less 0. These data are all consistent with the contents they are describing and thus reasonable.</p>
+	<p>In addition, from my perspective, the trend described by the table is consistent with my knowledge: Apple and Samsung&nbsp;are increasingly&nbsp;gaining popularity while Nokia is gradually losing its market share. <span style="text-decoration: underline;">So it matches up quite well well with my expectation.</span></p>
+	<p>This dataset describes the trend of market share held by but&nbsp;smartphone vendors rather than some kind of distribution. So I would answer that the trend is sensible.</p>
+      </div>
+
+      <div class="page-header">
+	<h2>Is the data correct?</h2>
+	<p>What aspects of this data can you verify? How did you do so? What did
+	you find?</p>
+	<p><em><strong>Answer.</strong>&nbsp;</em></p>
+	<p>It doesn't require complicated measurements or any objective conjectures to obtain the data, <span style="text-decoration: underline;">ruling out possible errors caused by measurements, question&nbsp;designs, implementations</span> and so on.</p>
+	<p>Though based&nbsp;on the discussion above (my expectation, and the&nbsp;sum of 1) and the authoritative data source, the data is correct with a very high chance, we still cannot rule out the chances of <span style="text-decoration: underline;">regional sample bias</span> since it is supposed to be based on a <span style="text-decoration: underline;">worldwide</span> survey.</p>
+	<p>&nbsp;</p>
+		</div>
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/docs.min.js"></script>
+  </body>
+</html>
